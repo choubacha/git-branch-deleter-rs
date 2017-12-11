@@ -31,7 +31,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "git-branch-deleter-rs"
+name = "git-bd"
 version = "0.1.0"
 dependencies = [
  "git2 0.6.9 (registry+https://github.com/rust-lang/crates.io-index)",
