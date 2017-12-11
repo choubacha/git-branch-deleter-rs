@@ -2,6 +2,7 @@ extern crate git2;
 use git2::{Repository, BranchType};
 use std::path::Path;
 use std::io;
+use std::io::Write;
 
 fn main() {
     let repo = Repository::open(&Path::new(".")).unwrap();
@@ -10,11 +11,12 @@ fn main() {
         if let Ok((ref mut branch, BranchType::Local)) = m {
             if branch.is_head() {
                 println!("Skipping branch {} as it is currently HEAD", branch.name().unwrap().unwrap());
-                break
+                continue;
             }
 
             'branch_questions: loop {
-                println!("Delete? {}\n(y/n): ", branch.name().unwrap().unwrap());
+                print!("\nbranch: {}\nDelete? (y/n): ", branch.name().unwrap().unwrap());
+                io::stdout().flush().unwrap();
 
                 let mut buffer = String::new();
                 io::stdin().read_line(&mut buffer).unwrap();
