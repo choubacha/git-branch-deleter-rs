@@ -13,7 +13,7 @@ fn main() {
         if let Ok((ref mut branch, BranchType::Local)) = m {
             let branch_name = branch.name().unwrap().unwrap().yellow();
             if branch.is_head() {
-                println!("Skipping branch {} as it is currently {}",
+                println!("\nSkipping branch {} as it is currently {}",
                          branch_name,
                          "HEAD".green());
                 continue;
@@ -28,16 +28,16 @@ fn main() {
                 match buffer.trim().to_lowercase().as_str() {
                     "yes" | "y" => {
                         match branch.delete() {
-                            Ok(_) => println!("{}", "Deleted".red()),
-                            Err(e) => println!("Error deleting: {}", e),
+                            Ok(_) => println!("{} has been {}", branch_name, "deleted".red()),
+                            Err(e) => println!("An error occurred while deleting {}:\n{}", branch_name, e),
                         };
                         break 'branch_questions;
                     },
                     "no" | "n" | "" => {
-                        println!("{}", "Skipped".yellow());
+                        println!("Skipping...");
                         break 'branch_questions;
                     },
-                    other => println!("Did not recognize {}", other.yellow()),
+                    other => println!("Did not recognize: '{}'", other.yellow()),
                 }
             }
         }
