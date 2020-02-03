@@ -1,10 +1,12 @@
 extern crate git2;
 extern crate colored;
+extern crate chrono;
 use git2::{Repository, BranchType};
 use std::path::Path;
 use std::io;
 use std::io::Write;
 use colored::*;
+use chrono::prelude::*;
 
 fn main() {
     let repo = Repository::open(&Path::new(".")).unwrap();
@@ -19,8 +21,15 @@ fn main() {
                 continue;
             }
 
+            let note = if let Ok(commit) = branch.get().peel_to_commit() {
+                let ago = Utc::now() - Utc.timestamp(commit.time().seconds(), 0);
+                format!("{} days ago", ago.num_days())
+            } else {
+                format!("not a commit")
+            };
+
             'branch_questions: loop {
-                print!("\nbranch: {}\nDelete? (y/n): ", branch_name);
+                print!("\nbranch: {} [{}]\nDelete? (y/n): ", branch_name, note);
                 io::stdout().flush().unwrap();
 
                 let mut buffer = String::new();

@@ -6,3 +6,4 @@ authors = ["Kevin Choubacha <kchoubacha@weedmaps.com>"]
 [dependencies]
 "git2" = "*"
 "colored" = "1.6"
+"chrono" = "0.4"
