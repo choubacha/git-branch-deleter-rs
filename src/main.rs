@@ -1,12 +1,12 @@
-extern crate git2;
-extern crate colored;
 extern crate chrono;
-use git2::{Repository, BranchType};
-use std::path::Path;
+extern crate colored;
+extern crate git2;
+use chrono::prelude::*;
+use colored::*;
+use git2::{BranchType, Repository};
 use std::io;
 use std::io::Write;
-use colored::*;
-use chrono::prelude::*;
+use std::path::Path;
 
 fn main() {
     let repo = Repository::open(&Path::new(".")).unwrap();
@@ -15,9 +15,11 @@ fn main() {
         if let Ok((ref mut branch, BranchType::Local)) = m {
             let branch_name = branch.name().unwrap().unwrap().yellow();
             if branch.is_head() {
-                println!("\nSkipping branch {} as it is currently {}",
-                         branch_name,
-                         "HEAD".green());
+                println!(
+                    "\nSkipping branch {} as it is currently {}",
+                    branch_name,
+                    "HEAD".green()
+                );
                 continue;
             }
 
@@ -38,14 +40,16 @@ fn main() {
                     "yes" | "y" => {
                         match branch.delete() {
                             Ok(_) => println!("{} has been {}", branch_name, "deleted".red()),
-                            Err(e) => println!("An error occurred while deleting {}:\n{}", branch_name, e),
+                            Err(e) => {
+                                println!("An error occurred while deleting {}:\n{}", branch_name, e)
+                            }
                         };
                         break 'branch_questions;
-                    },
+                    }
                     "no" | "n" | "" => {
                         println!("Skipping...");
                         break 'branch_questions;
-                    },
+                    }
                     other => println!("Did not recognize: '{}'", other.yellow()),
                 }
             }
